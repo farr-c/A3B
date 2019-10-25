@@ -1,7 +1,9 @@
 import csv
 
-userDict = {}
-
+def formatTimes(seconds):
+    minutes, _ = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    return str(hours) + "h " + str(minutes) + "m"
 
 def readData():
     movieData = {}
@@ -11,14 +13,12 @@ def readData():
     for x in data:
         if count != 0:
             line =  x.split(",")
-            minutes, _ = divmod(int(line[2]), 60)
-            hours, minutes = divmod(minutes, 60)
             movieCategorys = []
             
             for i in range(len(categorys)):
                 if line[i+4] == "1":
                     movieCategorys.append(categorys[i])
-            movieData[line[0]] = {"rating" : line[1], "length" : line[2],"viewLength" : str(hours) + "h " + str(minutes) + "m", "year" : line[3], "genre" : movieCategorys}
+            movieData[line[0]] = {"rating" : line[1], "length" : line[2],"viewLength" : formatTimes(int(line[2])), "year" : line[3], "genre" : movieCategorys}
         else:
             line = x.split(",")
             categorys = line[4:len(line)]
@@ -26,6 +26,7 @@ def readData():
     return movieData
 
 def loadUsers():
+    userDict = {}
     data = csv.DictReader(open("userData.csv"))
     for row in data:
         newDict = dict(row)
