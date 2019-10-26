@@ -14,7 +14,6 @@ def readData():
         if count != 0:
             line =  x.split(",")
             movieCategorys = []
-            
             for i in range(len(categorys)):
                 if line[i+4] == "1":
                     movieCategorys.append(categorys[i])
@@ -49,6 +48,7 @@ def saveInfo(userDict):
     data = csv.reader(open("userData.csv", "r"))
     newData = []
     for i in data:
+        # Unable to access data[0] so need to do it this way
         newData.append(i)
         break
     for i in userDict:
