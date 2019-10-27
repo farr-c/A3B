@@ -46,7 +46,9 @@ def main():
             if watched:
                 watchMovies.watch(userInfo, watchedMovie)
         elif choice == "4":
-            print(browse.recommender(movies, userInfo))
+           watchedMovie, watched = browse.recommender(movies, userInfo)
+           if watched:
+               watchMovies.watch(userInfo, watchedMovie )
         elif choice == "5":
             print("Saving and exiting application!")
             break

@@ -6,6 +6,7 @@ def askToWatch(movies, movieName):
     print("\nDetails for: " + movieName)
     print("Rating: " + str(movies[movieName]["rating"]))
     print("Length: " + str(movies[movieName]["viewLength"]))
+    print("Year: " + str(movies[movieName]["year"]))
     print("Genre: " + ", ".join(movies[movieName]["genre"]))
     return movieName, input("Would you like to watch the movie? y/n \n") == "y"
 
@@ -50,7 +51,7 @@ def recommender(movies, userinfo):
         if localScore > topMovieScore and not i in userinfo["watchedMovies"]:
             topMovie = i
             topMovieScore = localScore
-    return topMovie
+    return askToWatch(movies, topMovie)
 
 if __name__ == "__main__":
 
