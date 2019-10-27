@@ -2,13 +2,13 @@
 import IO
 
 
-def askToWatch(movies, movieName):
+def showDetails(movies, movieName):
     print("\nDetails for: " + movieName)
     print("Rating: " + str(movies[movieName]["rating"]))
     print("Length: " + str(movies[movieName]["viewLength"]))
     print("Year: " + str(movies[movieName]["year"]))
     print("Genre: " + ", ".join(movies[movieName]["genre"]))
-    return movieName, input("Would you like to watch the movie? y/n \n") == "y"
+ 
 
 def searchMovie(movies, search):
     results = []
@@ -20,7 +20,7 @@ def searchMovie(movies, search):
         print( str(i + 1) + ". " + results[i])
     if len(results) == 0:
         print("No movies match this search!")
-        return
+        return "nomatch", False
 
     while True:
         try:
@@ -29,29 +29,41 @@ def searchMovie(movies, search):
             break
         except:
             print("\nInvalid response! Please make sure all responses are only digits that do not exceed the search length!\n")
-    return askToWatch(movies, movieName)
+    showDetails(movies, movieName)
+    return movieName, input("Would you like to watch the movie? y/n \n") == "y"
     
 
 def recommender(movies, userinfo):
     weights = {}
-    topMovieScore = 0
-    topMovie = "True Detective " # If they havent watched anything they will be recomanded the top rated movie
+    skippedMovies = []
+   
     for i in userinfo["watchedMovies"]:
         year = movies[i]["year"]
         for genre in movies[i]["genre"]:
             weights[genre] =  genre in weights and weights[genre] + 1 or 1
         weights[year] = movies[i]["year"] in weights and + 1 or 1
-    for i in movies:
-        localScore = 0
-        for genre in movies[i]["genre"]:
-            if genre in weights:
-                localScore += weights[genre] 
-        if movies[i]["year"] in weights:
-            localScore += weights[movies[i]["year"]]
-        if localScore > topMovieScore and not i in userinfo["watchedMovies"]:
-            topMovie = i
-            topMovieScore = localScore
-    return askToWatch(movies, topMovie)
+    while True:
+        topMovieScore = 0
+        topMovie = "True Detective " # If they havent watched anything they will be recomanded the top rated movie
+        for i in movies:
+            localScore = 0
+            for genre in movies[i]["genre"]:
+                if genre in weights:
+                    localScore += weights[genre] 
+            if movies[i]["year"] in weights:
+                localScore += weights[movies[i]["year"]]
+            if localScore > topMovieScore and not i in userinfo["watchedMovies"] and not i in skippedMovies:
+                topMovie = i
+                topMovieScore = localScore
+        showDetails(movies, topMovie)
+        choice = input("\nWould you like to watch, skip this movie, or return? (watch, skip, return)\n")
+        if choice == "watch":
+            return topMovie, True
+        elif choice == "skip":
+            skippedMovies.append(topMovie)
+        else:
+            return topMovie, False
+
 
 if __name__ == "__main__":
 
