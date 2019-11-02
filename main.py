@@ -1,9 +1,19 @@
+'''
+This module handles all the main functionality of the program including the UI and the connections
+between the other modules
+
+'''
+
 import IO
 import browse
 import watchMovies
 import movieStatistics
 
 def main():
+
+    '''
+    This function manages the UI of the program as well and connects all the modules
+    '''
 
     username = "testUser"
 
@@ -15,10 +25,12 @@ def main():
         ["Get top 10 movies"],["Shortest, longest and average"],["Search"],["Recomend a movie\n"], ["Quit"]
     ]
 
+    # Commands are all the commands that will be displayed
+
     while True:
         for i in range(len(commands)):
             print(str(i+1) + ". " + commands[i][0])
-
+        # display commands
         choice = input("\nWhat would you like to do?\n")
         
         if choice == "1":
